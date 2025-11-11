@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import StatsCard from "@/components/StatsCard";
 import AIAdvisor from "@/components/AIAdvisor";
+import LanguageToggle from "@/components/LanguageToggle";
 import { regionalStats } from "@/lib/mockData";
+import { useLanguage } from "@/hooks/useLanguage";
 import { 
   Sprout, 
   Warehouse, 
@@ -20,32 +22,33 @@ import {
 
 export default function Index() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const roles = [
     {
-      title: "किसान पोर्टल",
-      description: "AI-संचालित फसल सलाह, मौसम योजना और बाजार जानकारी",
+      title: t('role.farmer'),
+      description: t('role.farmer.desc'),
       icon: Sprout,
       path: "/farmer",
       color: "from-green-600 to-green-700"
     },
     {
-      title: "माइक्रो-हब संचालन",
-      description: "इन्वेंटरी प्रबंधन, भंडारण और डिस्पैच",
+      title: t('role.hub'),
+      description: t('role.hub.desc'),
       icon: Warehouse,
       path: "/hub",
       color: "from-amber-600 to-amber-700"
     },
     {
-      title: "क्षेत्रीय योजना",
-      description: "AI-संचालित मांग-आपूर्ति निगरानी",
+      title: t('role.planner'),
+      description: t('role.planner.desc'),
       icon: BarChart3,
       path: "/planner",
       color: "from-blue-600 to-blue-700"
     },
     {
-      title: "पोषण योजना",
-      description: "AI-अनुकूलित घरेलू पोषण योजना",
+      title: t('role.nutrition'),
+      description: t('role.nutrition.desc'),
       icon: Apple,
       path: "/nutrition",
       color: "from-red-600 to-red-700"
@@ -54,23 +57,23 @@ export default function Index() {
 
   const aiFeatures = [
     {
-      title: "बुद्धिमान फसल सिफारिशें",
-      description: "AI मिट्टी, जलवायु और बाजार मांग का विश्लेषण करता है",
+      title: t('ai.cropRecommendations'),
+      description: t('ai.cropRecommendations.desc'),
       icon: Brain
     },
     {
-      title: "वास्तविक समय बाजार जानकारी",
-      description: "मूल्य रुझान, मांग पूर्वानुमान AI द्वारा संचालित",
+      title: t('ai.marketInfo'),
+      description: t('ai.marketInfo.desc'),
       icon: TrendingUp
     },
     {
-      title: "मौसम आधारित सलाह",
-      description: "7-दिन के मौसम पूर्वानुमान पर आधारित AI मार्गदर्शन",
+      title: t('ai.weatherAdvice'),
+      description: t('ai.weatherAdvice.desc'),
       icon: Zap
     },
     {
-      title: "कीट और रोग प्रबंधन",
-      description: "AI-संचालित निदान और उपचार सिफारिशें",
+      title: t('ai.pestManagement'),
+      description: t('ai.pestManagement.desc'),
       icon: Sparkles
     }
   ];
@@ -86,17 +89,18 @@ export default function Index() {
                 <Sprout className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FOOD-GRID</h1>
-                <p className="text-xs text-gray-600 hidden sm:block">AI-संचालित खाद्य पारिस्थितिकी तंत्र मंच</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{t('app.title')}</h1>
+                <p className="text-xs text-gray-600 hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <LanguageToggle />
               <div className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-2 sm:px-3 py-1 rounded-full">
                 <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="text-xs sm:text-sm font-medium">AI सक्षम</span>
+                <span className="text-xs sm:text-sm font-medium">{t('app.aiEnabled')}</span>
               </div>
               <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-green-700" />
-              <span className="text-xs sm:text-sm text-gray-700">मांड्या जिला</span>
+              <span className="text-xs sm:text-sm text-gray-700">{t('app.district')}</span>
             </div>
           </div>
         </div>
@@ -108,11 +112,11 @@ export default function Index() {
           <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4">
             <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-green-700" />
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900">
-              AI-संचालित कृषि बुद्धिमत्ता
+              {t('hero.title')}
             </h2>
           </div>
           <p className="text-sm sm:text-lg text-gray-700 leading-relaxed">
-            एक समन्वित, स्व-अनुकूलन खाद्य प्रणाली जो खाद्य सुरक्षा, पोषण गुणवत्ता और किसान समृद्धि प्रदान करती है
+            {t('hero.description')}
           </p>
         </div>
 
@@ -138,31 +142,31 @@ export default function Index() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-12">
           <StatsCard
-            title="कुल किसान"
-            value={regionalStats.totalFarmers.toLocaleString('hi-IN')}
+            title={t('stats.totalFarmers')}
+            value={regionalStats.totalFarmers.toLocaleString()}
             icon={Users}
             trend="up"
-            trendValue="+12% इस महीने"
+            trendValue={`+12% ${t('stats.thisMonth')}`}
           />
           <StatsCard
-            title="मासिक मात्रा"
+            title={t('stats.monthlyVolume')}
             value={regionalStats.monthlyVolume}
             icon={Package}
             trend="up"
-            trendValue="+8% पिछले महीने से"
+            trendValue={`+8% ${t('stats.fromLastMonth')}`}
           />
           <StatsCard
-            title="अपशिष्ट में कमी"
+            title={t('stats.wasteReduction')}
             value={regionalStats.wasteReduction}
             icon={TrendingUp}
             trend="up"
-            trendValue="लक्ष्य: 30%"
+            trendValue={`${t('stats.target')}: 30%`}
           />
           <StatsCard
-            title="AI सटीकता"
+            title={t('stats.aiAccuracy')}
             value={regionalStats.forecastAccuracy}
             icon={Brain}
-            description="पूर्वानुमान सटीकता"
+            description={t('stats.forecastAccuracy')}
           />
         </div>
 
@@ -178,56 +182,56 @@ export default function Index() {
               <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 p-4">
                 <CardTitle className="flex items-center gap-2 text-gray-900 text-base">
                   <Sparkles className="h-4 w-4 text-green-700" />
-                  AI क्षमताएं
+                  {t('ai.capabilities')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 space-y-2">
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">मिट्टी और जलवायु के आधार पर फसल सिफारिशें</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.soilBased')}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">बाजार मूल्य पूर्वानुमान और मांग विश्लेषण</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.marketForecast')}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">मौसम आधारित खेती सलाह</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.weatherBased')}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">कीट और रोग निदान समाधान के साथ</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.pestDiagnosis')}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">मिट्टी स्वास्थ्य और उर्वरक मार्गदर्शन</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.soilHealth')}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">सरकारी योजनाएं और सब्सिडी जानकारी</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.govSchemes')}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-1.5 w-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-gray-700">स्थानीय उत्पादन के साथ पोषण योजना</p>
+                  <p className="text-xs sm:text-sm text-gray-700">{t('ai.cap.nutritionPlan')}</p>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
               <CardHeader className="p-4">
-                <CardTitle className="text-gray-900 text-base">मंच प्रभाव</CardTitle>
+                <CardTitle className="text-gray-900 text-base">{t('impact.title')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-xs sm:text-sm text-gray-700">किसान आय</span>
+                  <span className="text-xs sm:text-sm text-gray-700">{t('impact.farmerIncome')}</span>
                   <span className="text-xs sm:text-sm font-bold text-green-700">+18%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-xs sm:text-sm text-gray-700">पोषण स्कोर</span>
+                  <span className="text-xs sm:text-sm text-gray-700">{t('impact.nutritionScore')}</span>
                   <span className="text-xs sm:text-sm font-bold text-blue-700">7.2/10</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-xs sm:text-sm text-gray-700">मूल्य स्थिरता</span>
+                  <span className="text-xs sm:text-sm text-gray-700">{t('impact.priceStability')}</span>
                   <span className="text-xs sm:text-sm font-bold text-indigo-700">92%</span>
                 </div>
               </CardContent>
@@ -260,7 +264,7 @@ export default function Index() {
                     navigate(role.path);
                   }}
                 >
-                  पोर्टल एक्सेस करें
+                  {t('role.accessPortal')}
                 </Button>
               </CardContent>
             </Card>
@@ -274,14 +278,14 @@ export default function Index() {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
             <p className="text-xs sm:text-sm text-gray-600 flex items-center gap-2 text-center sm:text-left">
               <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-green-700 flex-shrink-0" />
-              FOOD-GRID मंच - AI-संचालित चरण 1 पायलट | मांड्या जिला, कर्नाटक
+              {t('footer.platform')}
             </p>
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
-              <span>सक्रिय हब: {regionalStats.activeHubs}</span>
+              <span>{t('footer.activeHubs')}: {regionalStats.activeHubs}</span>
               <span className="hidden sm:inline">•</span>
-              <span>AI सटीकता: {regionalStats.forecastAccuracy}</span>
+              <span>{t('footer.aiAccuracy')}: {regionalStats.forecastAccuracy}</span>
               <span className="hidden sm:inline">•</span>
-              <span>मूल्य स्थिरता: {regionalStats.priceStability}</span>
+              <span>{t('footer.priceStability')}: {regionalStats.priceStability}</span>
             </div>
           </div>
         </div>

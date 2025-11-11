@@ -4,7 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatsCard from "@/components/StatsCard";
 import AIAdvisor from "@/components/AIAdvisor";
+import LanguageToggle from "@/components/LanguageToggle";
 import { farmerProfile, cropRecommendations, weatherForecast } from "@/lib/mockData";
+import { useLanguage } from "@/hooks/useLanguage";
+import { toast } from "sonner";
 import { 
   ArrowLeft, 
   MapPin, 
@@ -20,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function FarmerDashboard() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const getWeatherIcon = (icon: string) => {
     switch(icon) {
@@ -29,28 +33,43 @@ export default function FarmerDashboard() {
     }
   };
 
+  const handlePlanCrop = (cropName: string) => {
+    toast.success(t('common.success'), {
+      description: `Planning started for ${cropName}`
+    });
+  };
+
+  const handleQuickAction = (action: string) => {
+    toast.info("Action", {
+      description: `${action} feature coming soon!`
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-green-50 to-emerald-50">
       {/* Header */}
       <header className="bg-white border-b border-green-200 shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => navigate("/")}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center">
-                <Sprout className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Farmer Portal</h1>
-                <p className="text-sm text-gray-600">{farmerProfile.name}</p>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => navigate("/")}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center">
+                  <Sprout className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">{t('farmer.title')}</h1>
+                  <p className="text-sm text-gray-600">{farmerProfile.name}</p>
+                </div>
               </div>
             </div>
+            <LanguageToggle />
           </div>
         </div>
       </header>
@@ -67,25 +86,25 @@ export default function FarmerDashboard() {
                   {farmerProfile.location}
                 </CardDescription>
               </div>
-              <Badge className="bg-green-700">Active</Badge>
+              <Badge className="bg-green-700">{t('farmer.active')}</Badge>
             </div>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Farm Size</p>
+                <p className="text-sm text-gray-600">{t('farmer.farmSize')}</p>
                 <p className="text-lg font-semibold text-gray-900">{farmerProfile.farmSize}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Soil Type</p>
+                <p className="text-sm text-gray-600">{t('farmer.soilType')}</p>
                 <p className="text-lg font-semibold text-gray-900">{farmerProfile.soilType}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Farmer ID</p>
+                <p className="text-sm text-gray-600">{t('farmer.farmerId')}</p>
                 <p className="text-lg font-semibold text-gray-900">{farmerProfile.id}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Season</p>
+                <p className="text-sm text-gray-600">{t('farmer.season')}</p>
                 <p className="text-lg font-semibold text-gray-900">Kharif 2025</p>
               </div>
             </div>
@@ -100,7 +119,7 @@ export default function FarmerDashboard() {
               <CardHeader className="bg-gradient-to-r from-blue-50 to-sky-50">
                 <CardTitle className="flex items-center gap-2 text-gray-900">
                   <Cloud className="h-5 w-5 text-blue-600" />
-                  Weather Forecast
+                  {t('farmer.weather')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
@@ -118,7 +137,7 @@ export default function FarmerDashboard() {
                 </div>
                 <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                   <p className="text-sm text-gray-700">
-                    <strong>Advisory:</strong> {weatherForecast.advisory}
+                    <strong>{t('farmer.advisory')}:</strong> {weatherForecast.advisory}
                   </p>
                 </div>
               </CardContent>
@@ -127,9 +146,9 @@ export default function FarmerDashboard() {
             {/* Crop Recommendations */}
             <Card className="border-green-200">
               <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
-                <CardTitle className="text-gray-900">AI-Powered Crop Recommendations</CardTitle>
+                <CardTitle className="text-gray-900">{t('farmer.cropRecommendations')}</CardTitle>
                 <CardDescription>
-                  Based on your soil type, climate, and market demand
+                  {t('farmer.cropRecommendations.desc')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
@@ -153,7 +172,7 @@ export default function FarmerDashboard() {
                               : "bg-gray-600"
                           }
                         >
-                          {crop.suitability}% Match
+                          {crop.suitability}% {t('farmer.match')}
                         </Badge>
                       </div>
                       
@@ -161,39 +180,42 @@ export default function FarmerDashboard() {
                         <div className="flex items-center gap-2">
                           <TrendingUp className="h-4 w-4 text-green-700" />
                           <div>
-                            <p className="text-xs text-gray-600">Expected Yield</p>
+                            <p className="text-xs text-gray-600">{t('farmer.expectedYield')}</p>
                             <p className="text-sm font-medium text-gray-900">{crop.expectedYield}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <Sprout className="h-4 w-4 text-green-700" />
                           <div>
-                            <p className="text-xs text-gray-600">Market Demand</p>
-                            <p className="text-sm font-medium text-gray-900">{crop.marketDemand}</p>
+                            <p className="text-xs text-gray-600">{t('farmer.marketDemand')}</p>
+                            <p className="text-sm font-medium text-gray-900">{t(`market.${crop.marketDemand.toLowerCase()}`)}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <Droplets className="h-4 w-4 text-blue-600" />
                           <div>
-                            <p className="text-xs text-gray-600">Water Need</p>
-                            <p className="text-sm font-medium text-gray-900">{crop.waterRequirement}</p>
+                            <p className="text-xs text-gray-600">{t('farmer.waterNeed')}</p>
+                            <p className="text-sm font-medium text-gray-900">{t(`water.${crop.waterRequirement.toLowerCase()}`)}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-amber-600" />
                           <div>
-                            <p className="text-xs text-gray-600">Season</p>
+                            <p className="text-xs text-gray-600">{t('farmer.season')}</p>
                             <p className="text-sm font-medium text-gray-900">Kharif</p>
                           </div>
                         </div>
                       </div>
                       
                       <p className="text-sm text-gray-700 bg-green-50 p-2 rounded">
-                        <strong>Why this crop:</strong> {crop.reason}
+                        <strong>{t('farmer.whyThisCrop')}:</strong> {crop.reason}
                       </p>
                       
-                      <Button className="w-full mt-3 bg-green-700 hover:bg-green-800">
-                        Plan This Crop
+                      <Button 
+                        className="w-full mt-3 bg-green-700 hover:bg-green-800"
+                        onClick={() => handlePlanCrop(crop.crop)}
+                      >
+                        {t('farmer.planCrop')}
                       </Button>
                     </div>
                   ))}
@@ -208,20 +230,35 @@ export default function FarmerDashboard() {
             
             <Card className="border-amber-200">
               <CardHeader className="bg-gradient-to-r from-amber-50 to-orange-50">
-                <CardTitle className="text-gray-900">Quick Actions</CardTitle>
+                <CardTitle className="text-gray-900">{t('farmer.quickActions')}</CardTitle>
               </CardHeader>
               <CardContent className="pt-6 space-y-3">
-                <Button className="w-full bg-green-700 hover:bg-green-800">
-                  Register New Crop
+                <Button 
+                  className="w-full bg-green-700 hover:bg-green-800"
+                  onClick={() => handleQuickAction(t('farmer.registerCrop'))}
+                >
+                  {t('farmer.registerCrop')}
                 </Button>
-                <Button variant="outline" className="w-full border-green-700 text-green-700 hover:bg-green-50">
-                  View Market Prices
+                <Button 
+                  variant="outline" 
+                  className="w-full border-green-700 text-green-700 hover:bg-green-50"
+                  onClick={() => handleQuickAction(t('farmer.viewPrices'))}
+                >
+                  {t('farmer.viewPrices')}
                 </Button>
-                <Button variant="outline" className="w-full border-green-700 text-green-700 hover:bg-green-50">
-                  Schedule Harvest
+                <Button 
+                  variant="outline" 
+                  className="w-full border-green-700 text-green-700 hover:bg-green-50"
+                  onClick={() => handleQuickAction(t('farmer.scheduleHarvest'))}
+                >
+                  {t('farmer.scheduleHarvest')}
                 </Button>
-                <Button variant="outline" className="w-full border-green-700 text-green-700 hover:bg-green-50">
-                  Connect to Hub
+                <Button 
+                  variant="outline" 
+                  className="w-full border-green-700 text-green-700 hover:bg-green-50"
+                  onClick={() => handleQuickAction(t('farmer.connectHub'))}
+                >
+                  {t('farmer.connectHub')}
                 </Button>
               </CardContent>
             </Card>
