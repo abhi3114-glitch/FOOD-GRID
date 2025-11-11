@@ -187,4 +187,4 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ for farmers and food security**
+**Built by Abhishek for farmers and food security**
